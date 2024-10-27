@@ -5,12 +5,16 @@ from player import *
 def main():
     pygame.init()
 
-    clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-
     running = True
     dt = 0
+    clock = pygame.time.Clock()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    updateable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    Player.containers = (updateable, drawable)
+
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     while(running):
         for event in pygame.event.get():
@@ -19,9 +23,12 @@ def main():
 
         screen.fill("black")
 
-        player.update(dt)
+        for item in updateable:
+            item.update(dt)
 
-        player.draw(screen)
+        for item in drawable:
+            item.draw(screen)
+
         pygame.display.flip()
 
         dt = clock.tick(60) / 1000
